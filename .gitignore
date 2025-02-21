@@ -4,7 +4,9 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-Interfaz_api
+### Remover esto para lanzar la interfaz ###
+/Interfaz_api/
+
 
 ### STS ###
 .apt_generated
