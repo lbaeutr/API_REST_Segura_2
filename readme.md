@@ -33,8 +33,8 @@ Cada usuario tiene su propia lista de tareas almacenadas en esta colección.
 
 ## **Endpoints de la API**
 ###  Autenticación  
-- `POST /auth/register` ➝ Registrar usuario.  
-- `POST /auth/login` ➝ Iniciar sesión y obtener token.  
+- `POST /usuarios/register` ➝ Registrar usuario.  
+- `POST /usuarios/login` ➝ Iniciar sesión y obtener token.  
 
 ### Usuarios  
 - `GET /usuarios/{id}` ➝ Ver un usuario (solo él o ADMIN).  
@@ -62,9 +62,16 @@ Cada usuario tiene su propia lista de tareas almacenadas en esta colección.
 - `200` → Todo bien.  
 - `201` → Creado con éxito.  
 - `400` → Datos incorrectos.  
-- `401` → No autorizado (token inválido).  
+- `401` → No autorizado .  
 - `403` → No tienes permisos.  
 - `404` → No encontrado.  
+- `409` → Conflicto (EJ:usuario existente en BBDD).
 - `500` → Error del servidor.  
 
 ---
+
+# **Documentación:**
+
+* ## **[Documentacion PARTE II](src/main/resources/documentation/part_II.md)**
+
+
