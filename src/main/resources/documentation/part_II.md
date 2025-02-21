@@ -777,3 +777,12 @@ Se han registrado varios usuarios en la base de datos para comprobar el correcto
 
   ```
 
+---
+
+## Documentación extra
+
+### **Vídeo funcionamiento interfaz**
+
+
+
+<a href="https://www.canva.com/design/DAGfv6VjqS0/QwR7pDb2zHZRVPGTzHXlVA/watch?utm_content=DAGfv6VjqS0&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hac420c36b9"><img src="../../screenshot/icon/icono_play.png" alt="icono" width="200" height="200"></a>
