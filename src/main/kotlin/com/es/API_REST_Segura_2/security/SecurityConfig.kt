@@ -43,7 +43,8 @@ class SecurityConfig {
                 .requestMatchers("/usuarios/login", "/usuarios/register").permitAll() // Login y registro son públicos
                 .requestMatchers("/usuarios/all").hasRole("ADMIN") // Solo ADMIN puede ver todos los usuarios
                 .requestMatchers("/tareas/all").hasRole("ADMIN") // Solo ADMIN puede ver todas las tareas
-                .requestMatchers("/tareas/{id}").authenticated() // Todas las rutas de tareas requieren autenticación
+                .requestMatchers("/tareas/{id}").authenticated()
+                .requestMatchers("/tareas/mis-tareas").authenticated() // Solo usuarios autenticados pueden ver sus propias tareas
                 .requestMatchers("/tareas/**").authenticated() // Todas las rutas de tareas requieren autenticación
                 .anyRequest().authenticated() // Todas las demás rutas requieren autenticación
             } // Los recursos protegidos y publicos

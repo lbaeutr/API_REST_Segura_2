@@ -59,6 +59,17 @@ class TareaController {
         return ResponseEntity(tareaActualizada, HttpStatus.OK)
     }
 
+    @PutMapping("/mis-tareas")
+    fun updateAllTareas(
+        request: HttpServletRequest,
+        @RequestBody tareasUpdateDTO: List<TareaCreateDTO>
+    ): ResponseEntity<List<TareaDTO>> {
+        val usuarioId = obtenerUsuarioDesdeToken(request)
+        val tareasActualizadas = tareaService.updateAllTareas(usuarioId, tareasUpdateDTO)
+        return ResponseEntity(tareasActualizadas, HttpStatus.OK)
+    }
+
+
     @DeleteMapping("/{id}")
     fun deleteTarea(
         request: HttpServletRequest,
@@ -84,5 +95,13 @@ class TareaController {
         val tareas = tareaService.getAllTareas()
         return ResponseEntity(tareas, HttpStatus.OK)
     }
+
+    @GetMapping("/mis-tareas")
+    fun getMisTareas(request: HttpServletRequest): ResponseEntity<List<TareaDTO>> {
+        val usuarioId = obtenerUsuarioDesdeToken(request)
+        val tareas = tareaService.getTareasByUsuario(usuarioId)
+        return ResponseEntity(tareas, HttpStatus.OK)
+    }
+
 
 }

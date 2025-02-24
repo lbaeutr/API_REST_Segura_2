@@ -38,7 +38,8 @@ class TareaService {
         return TareaDTO(
             titulo = nuevaTarea.titulo,
             descripcion = nuevaTarea.descripcion,
-            estado = nuevaTarea.estado
+            estado = nuevaTarea.estado,
+            usuarioId = nuevaTarea.usuarioId
         )
     }
 
@@ -46,9 +47,15 @@ class TareaService {
     fun getTareasByUsuario(usuarioId: String): List<TareaDTO> {
         val tareas = tareaRepository.findByUsuarioId(usuarioId)
         return tareas.map { tarea ->
-            TareaDTO(tarea.titulo, tarea.descripcion, tarea.estado)
+            TareaDTO(
+                titulo = tarea.titulo,
+                descripcion = tarea.descripcion,
+                estado = tarea.estado,
+                usuarioId = tarea.usuarioId
+            )
         }
     }
+
 
     // 🔹 Obtener una tarea específica
     fun getTareaById(usuarioId: String, tareaId: Long): TareaDTO {
@@ -61,7 +68,7 @@ class TareaService {
             throw UnauthorizedException("No puedes acceder a esta tarea")
         }
 
-        return TareaDTO(tarea.titulo, tarea.descripcion, tarea.estado)
+        return TareaDTO(tarea.titulo, tarea.descripcion, tarea.estado, tarea.usuarioId)
     }
 
     // 🔹 Actualizar una tarea
@@ -83,8 +90,32 @@ class TareaService {
 
         tareaRepository.save(tareaActualizada)
 
-        return TareaDTO(tareaActualizada.titulo, tareaActualizada.descripcion, tareaActualizada.estado)
+        return TareaDTO(tareaActualizada.titulo, tareaActualizada.descripcion, tareaActualizada.estado, tareaActualizada.usuarioId)
     }
+
+    fun updateAllTareas(usuarioId: String, tareasUpdateDTO: List<TareaCreateDTO>): List<TareaDTO> {
+        val tareasUsuario = tareaRepository.findByUsuarioId(usuarioId)
+
+        if (tareasUsuario.isEmpty()) {
+            throw BadRequestException("No tienes tareas para actualizar")
+        }
+
+        val tareasActualizadas = tareasUsuario.mapIndexed { index, tarea ->
+            val updateDTO = tareasUpdateDTO.getOrNull(index) ?: return@mapIndexed tarea
+            tarea.copy(
+                titulo = updateDTO.titulo,
+                descripcion = updateDTO.descripcion,
+                estado = updateDTO.estado
+            )
+        }
+
+        tareaRepository.saveAll(tareasActualizadas)
+
+        return tareasActualizadas.map { tarea ->
+            TareaDTO(tarea.titulo, tarea.descripcion, tarea.estado, tarea.usuarioId)
+        }
+    }
+
 
     // 🔹 Eliminar una tarea
     fun deleteTarea(usuarioId: String, tareaId: Long) {
@@ -103,8 +134,9 @@ class TareaService {
     fun getAllTareas(): List<TareaDTO> {
         val tareas = tareaRepository.findAll()
         return tareas.map { tarea ->
-            TareaDTO(tarea.titulo, tarea.descripcion, tarea.estado)
+            TareaDTO(tarea.titulo, tarea.descripcion, tarea.estado, tarea.usuarioId)
         }
     }
+
 
 }
