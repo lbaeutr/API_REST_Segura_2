@@ -15,12 +15,14 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.security.oauth2.jwt.JwtEncoder
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter
 import org.springframework.security.web.SecurityFilterChain
 
 
@@ -35,11 +37,18 @@ class SecurityConfig {
     fun securityFilterChain(http: HttpSecurity) : SecurityFilterChain {
 
         return http
-            .csrf { csrf -> csrf.disable() } // Cross-Site Forgery
+            //.csrf { csrf -> csrf.disable() } // Cross-Site Forgery
+            .csrf { it.disable() } // Deshabilita CSRF porque JWT ya protege contra ataques CSRF
             .authorizeHttpRequests { auth -> auth
-                .anyRequest().permitAll()
+                .requestMatchers("/usuarios/login", "/usuarios/register").permitAll() // Login y registro son públicos
+                .requestMatchers("/usuarios/all").hasRole("ADMIN") // Solo ADMIN puede ver todos los usuarios
+                .requestMatchers("/tareas/all").hasRole("ADMIN") // Solo ADMIN puede ver todas las tareas
+                .requestMatchers("/tareas/{id}").authenticated() // Todas las rutas de tareas requieren autenticación
+                .requestMatchers("/tareas/**").authenticated() // Todas las rutas de tareas requieren autenticación
+                .anyRequest().authenticated() // Todas las demás rutas requieren autenticación
             } // Los recursos protegidos y publicos
-            .oauth2ResourceServer { oauth2 -> oauth2.jwt(Customizer.withDefaults()) }
+            //.oauth2ResourceServer { oauth2 -> oauth2.jwt(Customizer.withDefaults()) }]
+            .oauth2ResourceServer { oauth2 -> oauth2.jwt { jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()) } }
             .sessionManagement { session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .httpBasic(Customizer.withDefaults())
             .build()
@@ -78,6 +87,17 @@ class SecurityConfig {
         return NimbusJwtDecoder.withPublicKey(rsaKeys.publicKey).build()
     }
 
+
+
+    @Bean
+    fun jwtAuthenticationConverter(): JwtAuthenticationConverter {
+        val converter = JwtAuthenticationConverter()
+        converter.setJwtGrantedAuthoritiesConverter { jwt ->
+            val roles = jwt.getClaimAsStringList("roles") ?: listOf()
+            roles.map { SimpleGrantedAuthority(it) }
+        }
+        return converter
+    }
 
 
 

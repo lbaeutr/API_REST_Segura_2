@@ -72,6 +72,8 @@ Cada usuario tiene su propia lista de tareas almacenadas en esta colección.
 
 # **Documentación:**
 
-* ## **[Documentacion PARTE II](src/main/resources/documentation/part_II.md)**
+* ## **[Documentación - PARTE II](src/main/resources/documentation/part_II.md)**
+
+* ## **[Documentación - PARTE III](src/main/resources/documentation/part_III.md)**
 
 
