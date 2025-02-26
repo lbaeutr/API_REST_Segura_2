@@ -2,9 +2,11 @@
 
 ## 1. Introducción
 
-Este documento presenta la implementación del sistema de gestión de usuarios en la aplicación, abarcando el registro, inicio de sesión y autorización mediante tokens JWT.
+Este documento presenta la implementación del sistema de gestión de usuarios en la aplicación, abarcando el registro,
+inicio de sesión y autorización mediante tokens JWT.
 
-Se describen los endpoints de la API, su integración con MongoDB y las pruebas realizadas para garantizar su correcto funcionamiento.
+Se describen los endpoints de la API, su integración con MongoDB y las pruebas realizadas para garantizar su correcto
+funcionamiento.
 
 ---
 
@@ -54,11 +56,11 @@ spring.data.mongodb.auto-index-creation=true
 
 - **Endpoint:** `POST /usuarios/register`
 - **Descripción:** Permite registrar un nuevo usuario.
-- **Código de respuesta esperado:** 
+- **Código de respuesta esperado:**
 
-  - `201 Created` : Registro exitoso. 
-  - `400 Bad Request` : Uno o más campos vacíos.
-  - `409 Conflict` : Conflicto con la BBDD.
+    - `201 Created` : Registro exitoso.
+    - `400 Bad Request` : Uno o más campos vacíos.
+    - `409 Conflict` : Conflicto con la BBDD.
 
 - **Ejemplo de petición:**
 
@@ -90,12 +92,11 @@ spring.data.mongodb.auto-index-creation=true
 ```
 
 - **Captura de pantalla:**
-    - **Código de respuesta esperado:** `201 Created` 
+    - **Código de respuesta esperado:** `201 Created`
 
 ![Registro existoso](../../screenshot/register/01_registro.png "Registro existoso")
 
 ---
-
 
 ### **Petición con error "nickname en uso" (nickname ya registrado en MongoDB):**
 
@@ -119,6 +120,7 @@ En caso de que el nickname ya esté registrado, se enviará nuevamente la misma 
   }
 }
 ```
+
 - **Ejemplo de respuesta erronea**
 
 ```json
@@ -166,9 +168,9 @@ En caso de que el nickname esté vacío, se enviará la siguiente petición.
   "uri": "/usuarios/register"
 }
 ```
+
 - **Captura de pantalla:**
     - **Código de respuesta esperado:** `400 Bad Request`
-
 
 ![Registro errone nick](../../screenshot/register/03_nicknameVacio.png "Registro nick vacio")
 
@@ -176,7 +178,8 @@ En caso de que el nickname esté vacío, se enviará la siguiente petición.
 
 ### **Petición con error "correo electrónico en uso" (usuario con correo electrónico ya registrado en MongoDB):**
 
-En caso de que el correo electrónico ya esté registrado, se enviará la petición nuevamente, modificando el **"nickname"** para evitar conflictos con los casos anteriores.
+En caso de que el correo electrónico ya esté registrado, se enviará la petición nuevamente, modificando el **"nickname"
+** para evitar conflictos con los casos anteriores.
 
 - **Ejemplo de petición:**
 
@@ -205,6 +208,7 @@ En caso de que el correo electrónico ya esté registrado, se enviará la petici
   "uri": "/usuarios/register"
 }
 ```
+
 - **Captura de pantalla:**
     - **Código de respuesta esperado:** `409 Conflict`
 
@@ -214,9 +218,11 @@ En caso de que el correo electrónico ya esté registrado, se enviará la petici
 
 ### **Petición con error "correo electrónico vacío" (el usuario no proporciona un correo electrónico):**
 
-Para el caso de que el correo electrónico este vacio, se enviara la petición, pero con la modificación del **"nickname"**, para que no reconozca los casos anteriores del **"nickname"**.
+Para el caso de que el correo electrónico este vacio, se enviara la petición, pero con la modificación del **"nickname"
+**, para que no reconozca los casos anteriores del **"nickname"**.
 
 - **Ejemplo de petición:**
+
 ```json
 {
   "username": "prueba_correo",
@@ -238,10 +244,11 @@ Para el caso de que el correo electrónico este vacio, se enviara la petición, 
 
 ```json
 {
-	"message": "Bad Request Exception (400). Uno o más campos vacíos",
-	"uri": "/usuarios/register"
+  "message": "Bad Request Exception (400). Uno o más campos vacíos",
+  "uri": "/usuarios/register"
 }
 ```
+
 - **Captura de pantalla:**
     - **Código de respuesta esperado:** `400 Bad Request`
 
@@ -251,7 +258,8 @@ Para el caso de que el correo electrónico este vacio, se enviara la petición, 
 
 ### **Petición con error "contraseña inválida"**
 
-En caso de que la contraseña esté vacía, esta prueba se aplica tanto a **"password"** como a **"passwordRepeat"**, así como a cada opción de forma independiente.
+En caso de que la contraseña esté vacía, esta prueba se aplica tanto a **"password"** como a **"passwordRepeat"**, así
+como a cada opción de forma independiente.
 
 - **Ejemplo de petición:**
 
@@ -271,8 +279,8 @@ En caso de que la contraseña esté vacía, esta prueba se aplica tanto a **"pas
   }
 }
 ```
-- **Ejemplo de respuesta erronea**
 
+- **Ejemplo de respuesta erronea**
 
 ```json
 {
@@ -280,6 +288,7 @@ En caso de que la contraseña esté vacía, esta prueba se aplica tanto a **"pas
   "uri": "/usuarios/register"
 }
 ```
+
 - **Captura de pantalla:**
     - **Código de respuesta esperado:** `400 Bad Request`
 
@@ -289,7 +298,8 @@ En caso de que la contraseña esté vacía, esta prueba se aplica tanto a **"pas
 
 ### **Petición con "Rol" administrador:**
 
-Para el caso del rol de administrador, se enviará la siguiente petición para verificar que el rol asignado sea correcto y corresponda a un administrador.
+Para el caso del rol de administrador, se enviará la siguiente petición para verificar que el rol asignado sea correcto
+y corresponda a un administrador.
 
 - **Cuerpo JSON**
 
@@ -309,6 +319,7 @@ Para el caso del rol de administrador, se enviará la siguiente petición para v
   }
 }
 ```
+
 - **Ejemplo de respuesta erronea**
 
 ```json
@@ -318,6 +329,7 @@ Para el caso del rol de administrador, se enviará la siguiente petición para v
   "rol": "ADMIN"
 }
 ```
+
 - **Captura de pantalla:**
     - **Código de respuesta esperado:** `201 Created`
 
@@ -347,8 +359,8 @@ En caso de que el rol esté vacío o no se haya asignado ningún tipo de rol.
   }
 }
 ```
-- **Ejemplo de respuesta erronea**
 
+- **Ejemplo de respuesta erronea**
 
 ```json
 {
@@ -356,8 +368,9 @@ En caso de que el rol esté vacío o no se haya asignado ningún tipo de rol.
   "uri": "/usuarios/register"
 }
 ```
+
 - **Captura de pantalla:**
-    - **Código de respuesta esperado:** `400 Bad Request` 
+    - **Código de respuesta esperado:** `400 Bad Request`
 
 ![Registro admin vacio](../../screenshot/register/08_rolVacio.png "Registro admin vacio")
 
@@ -394,6 +407,7 @@ En caso de que el rol no tenga ningún identificador, ya sea "admin" o "user".
   "uri": "/usuarios/register"
 }
 ```
+
 - **Captura de pantalla:**
     - **Código de respuesta esperado:** `400 Bad Request`
 
@@ -423,6 +437,7 @@ En caso de que la provincia esté vacía y no se haya especificado ningún valor
   }
 }
 ```
+
 - **Ejemplo de respuesta erronea**
 
 ```json
@@ -431,6 +446,7 @@ En caso de que la provincia esté vacía y no se haya especificado ningún valor
   "uri": "/usuarios/register"
 }
 ```
+
 - **Captura de pantalla:**
     - **Código de respuesta esperado:** `400 Bad Request`
 
@@ -460,8 +476,8 @@ En caso de que la provincia contenga un municipio incorrecto.
   }
 }
 ```
-- **Ejemplo de respuesta erronea**
 
+- **Ejemplo de respuesta erronea**
 
 ```json
 {
@@ -469,6 +485,7 @@ En caso de que la provincia contenga un municipio incorrecto.
   "uri": "/usuarios/register"
 }
 ```
+
 - **Captura de pantalla:**
     - **Código de respuesta esperado:** `400 Bad Request`
 
@@ -507,6 +524,7 @@ En caso de que el municipio esté vacío y no se haya especificado ningún valor
   "uri": "/usuarios/register"
 }
 ```
+
 - **Captura de pantalla:**
     - **Código de respuesta esperado:** `400 Bad Request`
 
@@ -514,17 +532,19 @@ En caso de que el municipio esté vacío y no se haya especificado ningún valor
 
 ---
 
-He decidido no aplicar validaciones estrictas para los campos **calle**, **número** y **código postal**, ya que su verificación exacta puede resultar compleja. 
-Factores como la ausencia de numeración en algunas calles, la existencia de nombres de calles repetidos en distintas localidades o las variaciones en los códigos postales dificultan una validación precisa.
+He decidido no aplicar validaciones estrictas para los campos **calle**, **número** y **código postal**, ya que su
+verificación exacta puede resultar compleja.
+Factores como la ausencia de numeración en algunas calles, la existencia de nombres de calles repetidos en distintas
+localidades o las variaciones en los códigos postales dificultan una validación precisa.
 
 ### 3.2 Inicio de Sesión
 
 - **Endpoint:** `POST /usuarios/login`
 - **Descripción:** Permite a un usuario iniciar sesión.
-- **Código de respuesta esperado:** 
-  - `200 OK` (Éxito) 
-  - `401 Unauthorized` (Credenciales incorrectas)
-  - `400 Bad Request` (Uno o más campos vacíos)
+- **Código de respuesta esperado:**
+    - `200 OK` (Éxito)
+    - `401 Unauthorized` (Credenciales incorrectas)
+    - `400 Bad Request` (Uno o más campos vacíos)
 
 ### **Petición login correcto**
 
@@ -541,9 +561,10 @@ Esta respuesta incluye el token JWT que se utilizará para autorizar las peticio
 
 ```json
 {
-	"token": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiYW5nZWxpdG8iLCJleHAiOjE3NDAwNjk3MTMsImlhdCI6MTc0MDA2NjExMywicm9sZXMiOiJST0xFX1VTRVIifQ.oa-79mi0syyaOsVcSx-ksUmFtbqZ9njl8L9pbSYCphC_3G1805WHxuB9JNja42fbabyM72zAza8UXEChH_bVKS9sAZu1cTBCackA-Yz0-3VGv5a-oXrYKclX6NjyVmMQCncAPonFTNw-utcK7MADorgvcl30SYB12clhDaMW6U7SqnuDL5KlgPdQGYoJvG9n9jEz4cI_k25Sg9t1J1iqpkZb0wrJWpz58hbYYA0xKpumz737qcWphOC-rx1P4GIMz4gKukqWaVZskt33FkGBGVv913z4dBtOziBM1A5DZb7yfFKjSU_q1bISB7UiadX0Z9w-7Gd4UHq9upg-dftCVQ"
+  "token": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiYW5nZWxpdG8iLCJleHAiOjE3NDAwNjk3MTMsImlhdCI6MTc0MDA2NjExMywicm9sZXMiOiJST0xFX1VTRVIifQ.oa-79mi0syyaOsVcSx-ksUmFtbqZ9njl8L9pbSYCphC_3G1805WHxuB9JNja42fbabyM72zAza8UXEChH_bVKS9sAZu1cTBCackA-Yz0-3VGv5a-oXrYKclX6NjyVmMQCncAPonFTNw-utcK7MADorgvcl30SYB12clhDaMW6U7SqnuDL5KlgPdQGYoJvG9n9jEz4cI_k25Sg9t1J1iqpkZb0wrJWpz58hbYYA0xKpumz737qcWphOC-rx1P4GIMz4gKukqWaVZskt33FkGBGVv913z4dBtOziBM1A5DZb7yfFKjSU_q1bISB7UiadX0Z9w-7Gd4UHq9upg-dftCVQ"
 }
 ```
+
 - **Captura de pantalla:**
     - **Código de respuesta esperado:** `token`
 
@@ -568,9 +589,9 @@ Esta respuesta incluye el token JWT que se utilizará para autorizar las peticio
   "uri": "/usuarios/login"
 }
 ```
+
 - **Captura de pantalla:**
     - **Código de respuesta esperado:** `401 Unauthorized`
-
 
 ![Inicio sesion incorrecto](../../screenshot/register/014_inicio_sesion_incorrecto.png "Inicio sesion incorrecto")
 
@@ -578,7 +599,8 @@ Esta respuesta incluye el token JWT que se utilizará para autorizar las peticio
 
 ### **Petición inicio de sesion con campos vacíos**
 
-Esta validación se aplica tanto al campo **"username"** como al campo **"password"** y actúa en caso de que alguno de los campos esté vacío o ambos lo estén.
+Esta validación se aplica tanto al campo **"username"** como al campo **"password"** y actúa en caso de que alguno de
+los campos esté vacío o ambos lo estén.
 
 ```json
 {
@@ -595,6 +617,7 @@ Esta validación se aplica tanto al campo **"username"** como al campo **"passwo
   "uri": "/usuarios/login"
 }
 ```
+
 - **Captura de pantalla:**
     - **Código de respuesta esperado:** `400 Bad Request`
 
@@ -604,16 +627,15 @@ Esta validación se aplica tanto al campo **"username"** como al campo **"passwo
 ---
 
 ## 4. Interfaz Gráfica
-Se ha desarrollado una interfaz gráfica donde los usuarios pueden registrarse e iniciar sesión. Esta interfaz interactúa con los endpoints mencionados anteriormente para gestionar el acceso de los usuarios.
+
+Se ha desarrollado una interfaz gráfica donde los usuarios pueden registrarse e iniciar sesión. Esta interfaz interactúa
+con los endpoints mencionados anteriormente para gestionar el acceso de los usuarios.
 
 **interfaz gráfica**
 
 |                                    **Interfaz de login**                                    |                                    **Interfaz de registro**                                    |
 |:-------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------:|
 | ![Inicio sesion vacio](../../screenshot/login/016_pantalla_login.png "Inicio sesion vacio") | ![Inicio sesion vacio](../../screenshot/login/017_pantalla_registro.png "Inicio sesion vacio") |
-
-
-
 
 ### 4.1 Pruebas de la Interfaz Gráfica
 
@@ -624,7 +646,6 @@ Se ha desarrollado una interfaz gráfica donde los usuarios pueden registrarse e
 ![Registro existoso](../../screenshot/login/018_interfaz_login_correcto.png "Registro existoso")
 
 ---
-
 
 - **Caso de error:** El usuario intenta logearse con datos invalidos.
 
@@ -637,7 +658,6 @@ Se ha desarrollado una interfaz gráfica donde los usuarios pueden registrarse e
 ![Datos invalidos](../../screenshot/login/020_LoginDatosInvalidos.png "Datos invalidos")
 
 ---
-
 
 #### **Registro usuario**
 
@@ -665,14 +685,12 @@ Se ha desarrollado una interfaz gráfica donde los usuarios pueden registrarse e
 
 ---
 
-
 ## 5. Verificacion de datos en MongoDB
-
 
 ### **Usuarios registrados en MongoDB**
 
-Se han registrado varios usuarios en la base de datos para comprobar el correcto funcionamiento de los endpoints, adjunto una captura de pantalla con los usuarios registrados en MongoDB y el cuerpo JSON de los mismos.
-
+Se han registrado varios usuarios en la base de datos para comprobar el correcto funcionamiento de los endpoints,
+adjunto una captura de pantalla con los usuarios registrados en MongoDB y el cuerpo JSON de los mismos.
 
 - **Captura de pantalla página MongoDB:**
 
@@ -680,11 +698,12 @@ Se han registrado varios usuarios en la base de datos para comprobar el correcto
 
 - **Usuarios registrados(JSON):**
 
-
 ```json
 [
   {
-    "_id": {"$oid": "67b6e16fc2d38613b46714ae"},
+    "_id": {
+      "$oid": "67b6e16fc2d38613b46714ae"
+    },
     "_class": "com.es.API_REST_Segura_2.model.Usuario",
     "direccion": {
       "calle": "acacias",
@@ -699,7 +718,9 @@ Se han registrado varios usuarios en la base de datos para comprobar el correcto
     "username": "lbaeutr"
   },
   {
-    "_id": {"$oid": "67b7148e6395e7155e370ac8"},
+    "_id": {
+      "$oid": "67b7148e6395e7155e370ac8"
+    },
     "_class": "com.es.API_REST_Segura_2.model.Usuario",
     "direccion": {
       "calle": "real",
@@ -714,7 +735,9 @@ Se han registrado varios usuarios en la base de datos para comprobar el correcto
     "username": "angelito"
   },
   {
-    "_id": {"$oid": "67b75123fa876d07bbbccf55"},
+    "_id": {
+      "$oid": "67b75123fa876d07bbbccf55"
+    },
     "_class": "com.es.API_REST_Segura_2.model.Usuario",
     "direccion": {
       "calle": "calle acacias",
@@ -729,7 +752,9 @@ Se han registrado varios usuarios en la base de datos para comprobar el correcto
     "username": "prueba"
   },
   {
-    "_id": {"$oid": "67b75b48fa876d07bbbccf63"},
+    "_id": {
+      "$oid": "67b75b48fa876d07bbbccf63"
+    },
     "_class": "com.es.API_REST_Segura_2.model.Usuario",
     "direccion": {
       "calle": "calle acacias",
@@ -744,7 +769,9 @@ Se han registrado varios usuarios en la base de datos para comprobar el correcto
     "username": "prueba_rol"
   },
   {
-    "_id": {"$oid": "67b76636fa876d07bbbccf6e"},
+    "_id": {
+      "$oid": "67b76636fa876d07bbbccf6e"
+    },
     "_class": "com.es.API_REST_Segura_2.model.Usuario",
     "direccion": {
       "calle": "veticuatro de julio",
@@ -759,7 +786,9 @@ Se han registrado varios usuarios en la base de datos para comprobar el correcto
     "username": "luisito"
   },
   {
-    "_id": {"$oid": "67b780f848d3ca7c716e1b34"},
+    "_id": {
+      "$oid": "67b780f848d3ca7c716e1b34"
+    },
     "_class": "com.es.API_REST_Segura_2.model.Usuario",
     "direccion": {
       "calle": "gas",
@@ -781,8 +810,12 @@ Se han registrado varios usuarios en la base de datos para comprobar el correcto
 
 ## Documentación extra
 
-### **Vídeo funcionamiento interfaz**
+### **Vídeo funcionamiento interfaz: Login y registros.**
 
+<p align="center">
 
+<a href="https://www.canva.com/design/DAGfv6VjqS0/QwR7pDb2zHZRVPGTzHXlVA/watch?utm_content=DAGfv6VjqS0&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hac420c36b9">
+<img src="../../screenshot/icon/icono_play.png" alt="icono" width="200" height="200">
+</a>
 
-<a href="https://www.canva.com/design/DAGfv6VjqS0/QwR7pDb2zHZRVPGTzHXlVA/watch?utm_content=DAGfv6VjqS0&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hac420c36b9"><img src="../../screenshot/icon/icono_play.png" alt="icono" width="200" height="200"></a>
+</p>
