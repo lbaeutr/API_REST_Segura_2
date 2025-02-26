@@ -2,6 +2,9 @@ package com.es.API_REST_Segura_2.controller
 
 import com.es.API_REST_Segura_2.dto.TareaCreateDTO
 import com.es.API_REST_Segura_2.dto.TareaDTO
+import com.es.API_REST_Segura_2.error.exception.BadRequestException
+import com.es.API_REST_Segura_2.error.exception.NotFoundException
+import com.es.API_REST_Segura_2.repository.UsuarioRepository
 import com.es.API_REST_Segura_2.service.TareaService
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.beans.factory.annotation.Autowired
@@ -12,6 +15,9 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/tareas")
 class TareaController {
+
+    @Autowired
+    private lateinit var usuarioRepository: UsuarioRepository
 
     @Autowired
     private lateinit var tareaService: TareaService
@@ -101,6 +107,46 @@ class TareaController {
         val usuarioId = obtenerUsuarioDesdeToken(request)
         val tareas = tareaService.getTareasByUsuario(usuarioId)
         return ResponseEntity(tareas, HttpStatus.OK)
+    }
+
+
+    // Eliminar cualquier tarea de cualquier usuario (ADMIN)
+    @DeleteMapping("/admin/{id}")
+    fun deleteAnyTarea(
+        request: HttpServletRequest,
+        @PathVariable id: Long
+    ): ResponseEntity<Void> {
+        val esAdmin = request.isUserInRole("ROLE_ADMIN")
+        if (!esAdmin) {
+            return ResponseEntity(HttpStatus.FORBIDDEN)
+        }
+
+        tareaService.deleteAnyTarea(id)
+        return ResponseEntity(HttpStatus.NO_CONTENT)
+    }
+
+    // Crear una tarea para cualquier usuario (ADMIN)
+    @PostMapping("/admin")
+    fun createTareaForUser(
+        request: HttpServletRequest,
+        @RequestBody tareaCreateDTO: TareaCreateDTO,
+        @RequestParam usuarioId: String
+    ): ResponseEntity<TareaDTO> {
+        val esAdmin = request.isUserInRole("ROLE_ADMIN")
+        val usuarioExiste = usuarioRepository.findByUsername(usuarioId).isPresent
+        if (!esAdmin) {
+            return ResponseEntity(HttpStatus.FORBIDDEN)
+        }
+
+
+//        //todo: verificar que el usuario existe y comprobar que el codigo de error sea correcto
+//        if (!usuarioExiste) {
+//            return ResponseEntity(HttpStatus.NOT_FOUND)
+//        }
+
+
+        val tareaCreada = tareaService.createTareaForUser(usuarioId, tareaCreateDTO)
+        return ResponseEntity(tareaCreada, HttpStatus.CREATED)
     }
 
 

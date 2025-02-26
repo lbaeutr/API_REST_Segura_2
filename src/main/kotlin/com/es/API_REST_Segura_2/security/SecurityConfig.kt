@@ -45,6 +45,7 @@ class SecurityConfig {
                 .requestMatchers("/tareas/all").hasRole("ADMIN") // Solo ADMIN puede ver todas las tareas
                 .requestMatchers("/tareas/{id}").authenticated()
                 .requestMatchers("/tareas/mis-tareas").authenticated() // Solo usuarios autenticados pueden ver sus propias tareas
+                .requestMatchers("/tareas/admin/**").hasRole("ADMIN") // Solo ADMIN puede eliminar o crear tareas para otros usuarios
                 .requestMatchers("/tareas/**").authenticated() // Todas las rutas de tareas requieren autenticación
                 .anyRequest().authenticated() // Todas las demás rutas requieren autenticación
             } // Los recursos protegidos y publicos
