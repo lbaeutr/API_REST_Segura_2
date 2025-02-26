@@ -39,14 +39,19 @@ Cada usuario tiene su propia lista de tareas almacenadas en esta colección.
 ### Usuarios  
 - `GET /usuarios/{id}` ➝ Ver un usuario (solo él o ADMIN).  
 - `PUT /usuarios/{id}` ➝ Editar usuario (solo él o ADMIN).  
-- `DELETE /usuarios/{id}` ➝ Borrar usuario (solo ADMIN).  
+- `DELETE /usuarios/{id}` ➝ Borrar usuario.  
 
 ### Tareas  
-- `GET /tareas` ➝ Ver todas las tareas (solo ADMIN).  
-- `GET /tareas/mis-tareas` ➝ Ver mis tareas.  
+- `GET /tareas/mis-tareas` ➝ Ver mis tareas (solo USER).  
 - `POST /tareas` ➝ Crear una tarea.  
-- `PUT /tareas/{id}` ➝ Editar tarea (solo dueño o ADMIN).  
-- `DELETE /tareas/{id}` ➝ Borrar tarea (solo dueño o ADMIN).  
+- `PUT /tareas/{id}` ➝ Editar tarea (solo USER).  
+- `DELETE /tareas/{id}` ➝ Borrar tarea (solo USER).  
+- `GET /tareas/all` ➝ Ver mis tareas (solo ADMIN).
+- `DELETE /tareas/admin/{id}` ➝ Borrar tarea (solo ADMIN).
+- `POST /tareas/admin?usuarioId={usuarioId}` ➝ Crear una tarea (solo ADMIN).
+
+
+
 
 ---
 
