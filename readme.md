@@ -81,4 +81,6 @@ Cada usuario tiene su propia lista de tareas almacenadas en esta colección.
 
 * ## **[Documentación - PARTE III: Gestión de Tareas](src/main/resources/documentation/part_III.md)**
 
+* ## **[Documentación - PARTE IV: Final](src/main/resources/documentation/part_IV.md)**
+
 
