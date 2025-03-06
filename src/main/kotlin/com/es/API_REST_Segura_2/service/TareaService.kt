@@ -6,11 +6,15 @@ import com.es.API_REST_Segura_2.error.exception.BadRequestException
 import com.es.API_REST_Segura_2.error.exception.UnauthorizedException
 import com.es.API_REST_Segura_2.model.Tarea
 import com.es.API_REST_Segura_2.repository.TareaRepository
+import com.es.API_REST_Segura_2.repository.UsuarioRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
 class TareaService {
+
+    @Autowired
+    private lateinit var usuarioRepository: UsuarioRepository
 
     @Autowired
     private lateinit var tareaRepository: TareaRepository
@@ -92,7 +96,8 @@ class TareaService {
         val tareaActualizada = tarea.copy(
             titulo = tareaUpdateDTO.titulo,
             descripcion = tareaUpdateDTO.descripcion,
-            estado = tareaUpdateDTO.estado
+            estado = tareaUpdateDTO.estado,
+
         )
 
         tareaRepository.save(tareaActualizada)
@@ -106,6 +111,47 @@ class TareaService {
         )
     }
 
+//    fun updateTarea(usuarioId: String, tareaId: Long, tareaUpdateDTO: TareaCreateDTO): TareaDTO {
+//        val tarea = tareaRepository.findById(tareaId).orElseThrow {
+//            BadRequestException("Tarea no encontrada")
+//        }
+//
+//        // 🔹 Buscar al usuario en la BD para verificar su rol
+//        val usuario = usuarioRepository.findByUsername(usuarioId).orElseThrow {
+//            UnauthorizedException("Usuario no encontrado")
+//        }
+//
+//        // 🔹 Si no es dueño de la tarea y no es ADMIN, se lanza un error
+//        if (tarea.usuarioId != usuarioId && usuario.roles != "ROLE_ADMIN") {
+//            throw UnauthorizedException("No puedes modificar esta tarea")
+//        }
+//
+//        // 🔹 Verificar que el título y la descripción no estén vacíos
+//        if (tareaUpdateDTO.titulo.isBlank() || tareaUpdateDTO.descripcion.isBlank()) {
+//            throw BadRequestException("El título y la descripción no pueden estar vacíos")
+//        }
+//
+//        println("✅ Actualizando tarea ${tarea._id} con nuevos datos: ${tareaUpdateDTO}")
+//
+//        val tareaActualizada = tarea.copy(
+//            titulo = tareaUpdateDTO.titulo,
+//            descripcion = tareaUpdateDTO.descripcion,
+//            estado = tareaUpdateDTO.estado
+//        )
+//
+//        tareaRepository.save(tareaActualizada)
+//
+//        return TareaDTO(
+//            tareaActualizada._id.toString(),
+//            tareaActualizada.titulo,
+//            tareaActualizada.descripcion,
+//            tareaActualizada.estado,
+//            tareaActualizada.usuarioId
+//        )
+//    }
+
+
+
     fun updateAllTareas(usuarioId: String, tareasUpdateDTO: List<TareaCreateDTO>): List<TareaDTO> {
         val tareasUsuario = tareaRepository.findByUsuarioId(usuarioId)
 
@@ -118,7 +164,7 @@ class TareaService {
             tarea.copy(
                 titulo = updateDTO.titulo,
                 descripcion = updateDTO.descripcion,
-                estado = updateDTO.estado
+                estado = updateDTO.estado,
             )
         }
 
@@ -140,9 +186,9 @@ class TareaService {
         }
 
         // Verificar que el usuario solo pueda eliminar sus propias tareas
-        if (tarea.usuarioId != usuarioId) {
-            throw UnauthorizedException("No puedes eliminar esta tarea")
-        }
+//        if (tarea.usuarioId != usuarioId) {
+//            throw UnauthorizedException("No puedes eliminar esta tarea")
+//        }
 
         tareaRepository.delete(tarea)
     }
