@@ -37,8 +37,7 @@ class SecurityConfig {
     fun securityFilterChain(http: HttpSecurity) : SecurityFilterChain {
 
         return http
-            //.csrf { csrf -> csrf.disable() } // Cross-Site Forgery
-            .csrf { it.disable() } // Deshabilita CSRF porque JWT ya protege contra ataques CSRF
+            .csrf { csrf -> csrf.disable() } // Cross-Site Forgery
             .authorizeHttpRequests { auth -> auth
                 .requestMatchers("/usuarios/login", "/usuarios/register").permitAll() // Login y registro son públicos
                 .requestMatchers("/usuarios/all").hasRole("ADMIN") // Solo ADMIN puede ver todos los usuarios
@@ -49,8 +48,7 @@ class SecurityConfig {
                 .requestMatchers("/tareas/**").authenticated() // Todas las rutas de tareas requieren autenticación
                 .anyRequest().authenticated() // Todas las demás rutas requieren autenticación
             } // Los recursos protegidos y publicos
-            //.oauth2ResourceServer { oauth2 -> oauth2.jwt(Customizer.withDefaults()) }]
-            .oauth2ResourceServer { oauth2 -> oauth2.jwt { jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()) } }
+            .oauth2ResourceServer { oauth2 -> oauth2.jwt(Customizer.withDefaults()) }
             .sessionManagement { session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .httpBasic(Customizer.withDefaults())
             .build()

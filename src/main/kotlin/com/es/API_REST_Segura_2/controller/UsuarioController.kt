@@ -57,6 +57,7 @@ class UsuarioController {
 
         val authentication: Authentication
         try {
+            // creamos un token con el usuario y contraseña
             authentication = authenticationManager.authenticate(UsernamePasswordAuthenticationToken(usuario.username, usuario.password))
         } catch (e: AuthenticationException) {
             throw UnauthorizedException("Credenciales incorrectas")
@@ -71,7 +72,7 @@ class UsuarioController {
     }
 
 
-
+//############################################################################################################
 
     // Obtener todos los usuarios
     @GetMapping("/all")

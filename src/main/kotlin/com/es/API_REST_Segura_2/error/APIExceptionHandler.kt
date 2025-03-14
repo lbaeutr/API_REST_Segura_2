@@ -65,4 +65,6 @@ class APIExceptionHandler {
         e.printStackTrace()
         return ErrorRespuesta(e.message!!, request.requestURI)
     }
+
+
 }

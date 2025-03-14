@@ -111,47 +111,8 @@ class TareaService {
         )
     }
 
-//    fun updateTarea(usuarioId: String, tareaId: Long, tareaUpdateDTO: TareaCreateDTO): TareaDTO {
-//        val tarea = tareaRepository.findById(tareaId).orElseThrow {
-//            BadRequestException("Tarea no encontrada")
-//        }
-//
-//        // 🔹 Buscar al usuario en la BD para verificar su rol
-//        val usuario = usuarioRepository.findByUsername(usuarioId).orElseThrow {
-//            UnauthorizedException("Usuario no encontrado")
-//        }
-//
-//        // 🔹 Si no es dueño de la tarea y no es ADMIN, se lanza un error
-//        if (tarea.usuarioId != usuarioId && usuario.roles != "ROLE_ADMIN") {
-//            throw UnauthorizedException("No puedes modificar esta tarea")
-//        }
-//
-//        // 🔹 Verificar que el título y la descripción no estén vacíos
-//        if (tareaUpdateDTO.titulo.isBlank() || tareaUpdateDTO.descripcion.isBlank()) {
-//            throw BadRequestException("El título y la descripción no pueden estar vacíos")
-//        }
-//
-//        println("✅ Actualizando tarea ${tarea._id} con nuevos datos: ${tareaUpdateDTO}")
-//
-//        val tareaActualizada = tarea.copy(
-//            titulo = tareaUpdateDTO.titulo,
-//            descripcion = tareaUpdateDTO.descripcion,
-//            estado = tareaUpdateDTO.estado
-//        )
-//
-//        tareaRepository.save(tareaActualizada)
-//
-//        return TareaDTO(
-//            tareaActualizada._id.toString(),
-//            tareaActualizada.titulo,
-//            tareaActualizada.descripcion,
-//            tareaActualizada.estado,
-//            tareaActualizada.usuarioId
-//        )
-//    }
 
-
-
+    // Actualizar todas las tareas de un usuario
     fun updateAllTareas(usuarioId: String, tareasUpdateDTO: List<TareaCreateDTO>): List<TareaDTO> {
         val tareasUsuario = tareaRepository.findByUsuarioId(usuarioId)
 
@@ -159,6 +120,11 @@ class TareaService {
             throw BadRequestException("No tienes tareas para actualizar")
         }
 
+        /*
+        Se recorre tareasUsuario con mapIndexed, obteniendo el índice y la tarea.
+        Luego, se busca el TareaCreateDTO correspondiente en tareasUpdateDTO.
+        Si no existe (getOrNull(index) == null), se mantiene la tarea original.
+         */
         val tareasActualizadas = tareasUsuario.mapIndexed { index, tarea ->
             val updateDTO = tareasUpdateDTO.getOrNull(index) ?: return@mapIndexed tarea
             tarea.copy(
@@ -179,20 +145,21 @@ class TareaService {
     // Eliminar una tarea
     fun deleteTarea(usuarioId: String, tareaId: Long) {
 
-        //todo: verificar que el usuario existe y comprobar que el codigo de error sea correcto
 
+        // Verificar que la tarea exista
         val tarea = tareaRepository.findById(tareaId).orElseThrow {
             BadRequestException("Tarea no encontrada")
         }
 
         // Verificar que el usuario solo pueda eliminar sus propias tareas
-//        if (tarea.usuarioId != usuarioId) {
-//            throw UnauthorizedException("No puedes eliminar esta tarea")
-//        }
+        if (tarea.usuarioId != usuarioId) {
+            throw UnauthorizedException("No puedes eliminar esta tarea")
+        }
 
         tareaRepository.delete(tarea)
     }
 
+    // Obtener todas las tareas de todos los usuarios
     fun getAllTareas(): List<TareaDTO> {
         val tareas = tareaRepository.findAll()
         return tareas.map { tarea ->
@@ -209,45 +176,7 @@ class TareaService {
         tareaRepository.delete(tarea)
     }
 
-    // Crear una tarea para cualquier usuario (ADMIN)
-    fun createTareaForUser(usuarioId: String, tareaCreateDTO: TareaCreateDTO): TareaDTO {
 
-        val usuario = tareaRepository.findByUsuarioId(usuarioId)
-
-        if (usuario.isEmpty()) {
-            throw BadRequestException("Usuario no encontrado en la BBDD")
-        }
-
-
-
-
-
-        if (tareaCreateDTO.titulo.isBlank() || tareaCreateDTO.descripcion.isBlank()) {
-            throw BadRequestException("El título y la descripción no pueden estar vacíos")
-        }
-
-        // Obtener el ID autoincremental
-        val lastTarea = tareaRepository.findAll().maxByOrNull { it._id }
-        val nextId = (lastTarea?._id ?: 0) + 1
-
-        val nuevaTarea = Tarea(
-            _id = nextId,
-            titulo = tareaCreateDTO.titulo,
-            descripcion = tareaCreateDTO.descripcion,
-            estado = false, // Siempre inicia en "pendiente"
-            usuarioId = usuarioId
-        )
-
-        tareaRepository.insert(nuevaTarea)
-
-        return TareaDTO(
-            _id = nuevaTarea._id.toString(),
-            titulo = nuevaTarea.titulo,
-            descripcion = nuevaTarea.descripcion,
-            estado = nuevaTarea.estado,
-            usuarioId = nuevaTarea.usuarioId
-        )
-    }
 
 
 }
