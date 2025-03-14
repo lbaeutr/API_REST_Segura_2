@@ -98,7 +98,7 @@ class TareaService {
             descripcion = tareaUpdateDTO.descripcion,
             estado = tareaUpdateDTO.estado,
 
-        )
+            )
 
         tareaRepository.save(tareaActualizada)
 
@@ -185,11 +185,14 @@ class TareaService {
             BadRequestException("Tarea no encontrada")
         }
 
+<<<<<<< HEAD
         // Verificar que el usuario solo pueda eliminar sus propias tareas
 //        if (tarea.usuarioId != usuarioId) {
 //            throw UnauthorizedException("No puedes eliminar esta tarea")
 //        }
 
+=======
+>>>>>>> 82520c5 (NoMequedoTranquilo con render por eso despues de mi defensa actualizo)
         tareaRepository.delete(tarea)
     }
 
