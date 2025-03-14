@@ -98,7 +98,7 @@ class TareaService {
             descripcion = tareaUpdateDTO.descripcion,
             estado = tareaUpdateDTO.estado,
 
-        )
+            )
 
         tareaRepository.save(tareaActualizada)
 
@@ -112,7 +112,6 @@ class TareaService {
     }
 
 
-    // Actualizar todas las tareas de un usuario
     fun updateAllTareas(usuarioId: String, tareasUpdateDTO: List<TareaCreateDTO>): List<TareaDTO> {
         val tareasUsuario = tareaRepository.findByUsuarioId(usuarioId)
 
@@ -120,11 +119,6 @@ class TareaService {
             throw BadRequestException("No tienes tareas para actualizar")
         }
 
-        /*
-        Se recorre tareasUsuario con mapIndexed, obteniendo el índice y la tarea.
-        Luego, se busca el TareaCreateDTO correspondiente en tareasUpdateDTO.
-        Si no existe (getOrNull(index) == null), se mantiene la tarea original.
-         */
         val tareasActualizadas = tareasUsuario.mapIndexed { index, tarea ->
             val updateDTO = tareasUpdateDTO.getOrNull(index) ?: return@mapIndexed tarea
             tarea.copy(
@@ -146,20 +140,13 @@ class TareaService {
     fun deleteTarea(usuarioId: String, tareaId: Long) {
 
 
-        // Verificar que la tarea exista
         val tarea = tareaRepository.findById(tareaId).orElseThrow {
             BadRequestException("Tarea no encontrada")
-        }
-
-        // Verificar que el usuario solo pueda eliminar sus propias tareas
-        if (tarea.usuarioId != usuarioId) {
-            throw UnauthorizedException("No puedes eliminar esta tarea")
         }
 
         tareaRepository.delete(tarea)
     }
 
-    // Obtener todas las tareas de todos los usuarios
     fun getAllTareas(): List<TareaDTO> {
         val tareas = tareaRepository.findAll()
         return tareas.map { tarea ->

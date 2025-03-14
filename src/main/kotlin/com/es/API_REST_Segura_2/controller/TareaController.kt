@@ -5,7 +5,6 @@ import com.es.API_REST_Segura_2.dto.TareaDTO
 import com.es.API_REST_Segura_2.repository.UsuarioRepository
 import com.es.API_REST_Segura_2.service.TareaService
 import jakarta.servlet.http.HttpServletRequest
-import org.apache.coyote.Request
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
